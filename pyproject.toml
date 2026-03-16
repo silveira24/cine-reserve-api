@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "cine-reserve-api"
+version = "0.1.0"
+description = "api to cinema operations management"
+authors = ["Silveira <gabriel.silveira.700@ufrn.edu.br>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^6.0.3"
+djangorestframework = "^3.16.1"
+djangorestframework-simplejwt = "^5.5.1"
+drf-spectacular = "^0.29.0"
+psycopg2-binary = "^2.9.11"
+python-dotenv = "^1.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
