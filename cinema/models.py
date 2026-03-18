@@ -3,7 +3,7 @@ from django.db import models
 from accounts.models import User
 
 class Movie(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     duration_minutes = models.PositiveIntegerField()
 
@@ -11,7 +11,7 @@ class Movie(models.Model):
         return self.title
 
 class Room(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     rows = models.PositiveIntegerField()
     columns = models.PositiveIntegerField()
 
@@ -27,12 +27,12 @@ class Session(models.Model):
         return f"{self.movie} - {self.room} - {self.start_time}"
     
 class Seat(models.Model):
-    Room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='seats')
-    row = models.PositiveIntegerField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='seats')
+    row = models.CharField()
     column = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"Row {self.row}, Column {self.column}"
+        return f"{self.room} - Row {self.row}, Column {self.column}"
     
 class Ticket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
