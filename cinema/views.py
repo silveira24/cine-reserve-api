@@ -3,6 +3,7 @@ from .models import Movie, Room, Seat, Session, Ticket
 from .serializers import MovieSerializer, SessionSerializer
 
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 from drf_spectacular.utils import extend_schema
 
@@ -24,7 +25,8 @@ class MovieSessionList(generics.ListAPIView):
 
     def get_queryset(self):
         movie_id = self.kwargs['movie_id']
+        movie = get_object_or_404(Movie, id=movie_id)
         return Session.objects.filter(
-            movie__id=movie_id,
+            movie=movie,
             start_time__gte=timezone.now()
-        ).select_related('room')
+        ).select_related('room').order_by('start_time')
