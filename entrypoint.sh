@@ -7,5 +7,6 @@ until python3 ./manage.py check 2> /dev/null; do
 done
 
 python3 ./manage.py migrate --noinput
+python3 ./manage.py setup_cinema
 
 exec "$@"
