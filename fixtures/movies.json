@@ -1,0 +1,137 @@
+[
+  {
+    "model": "cinema.movie",
+    "pk": 1,
+    "fields": {
+      "title": "Inception",
+      "description": "A thief who steals corporate secrets through the use of dream-sharing technology.",
+      "duration_minutes": 148
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 2,
+    "fields": {
+      "title": "Interstellar",
+      "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      "duration_minutes": 169
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 3,
+    "fields": {
+      "title": "The Matrix",
+      "description": "A computer hacker learns from mysterious rebels about the true nature of his reality.",
+      "duration_minutes": 136
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 4,
+    "fields": {
+      "title": "Gladiator",
+      "description": "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family.",
+      "duration_minutes": 155
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 5,
+    "fields": {
+      "title": "The Dark Knight",
+      "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham.",
+      "duration_minutes": 152
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 6,
+    "fields": {
+      "title": "Pulp Fiction",
+      "description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine.",
+      "duration_minutes": 154
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 7,
+    "fields": {
+      "title": "Avatar",
+      "description": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders.",
+      "duration_minutes": 162
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 8,
+    "fields": {
+      "title": "The Prestige",
+      "description": "After a tragic accident, two stage magicians engage in a battle to create the ultimate illusion.",
+      "duration_minutes": 130
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 9,
+    "fields": {
+      "title": "Memento",
+      "description": "A man with short-term memory loss attempts to track down his wife's murderer.",
+      "duration_minutes": 113
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 10,
+    "fields": {
+      "title": "Se7en",
+      "description": "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motifs.",
+      "duration_minutes": 127
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 11,
+    "fields": {
+      "title": "Dune",
+      "description": "Feature adaptation of Frank Herbert's science fiction novel, about the son of a noble family entrusted with the protection.",
+      "duration_minutes": 155
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 12,
+    "fields": {
+      "title": "Parasite",
+      "description": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+      "duration_minutes": 132
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 13,
+    "fields": {
+      "title": "The Batman",
+      "description": "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate.",
+      "duration_minutes": 176
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 14,
+    "fields": {
+      "title": "Whiplash",
+      "description": "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored.",
+      "duration_minutes": 106
+    }
+  },
+  {
+    "model": "cinema.movie",
+    "pk": 15,
+    "fields": {
+      "title": "Oppenheimer",
+      "description": "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
+      "duration_minutes": 180
+    }
+  }
+]
