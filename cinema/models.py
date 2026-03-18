@@ -20,15 +20,15 @@ class Room(models.Model):
         return self.name
     
 class Session(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='sessions')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='sessions')
     start_time = models.DateTimeField()
 
     def __str__(self):
         return f"{self.movie} - {self.room} - {self.start_time}"
     
 class Seat(models.Model):
-    Room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    Room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='seats')
     row = models.PositiveIntegerField()
     column = models.PositiveIntegerField()
 
@@ -36,9 +36,9 @@ class Seat(models.Model):
         return f"Row {self.row}, Column {self.column}"
     
 class Ticket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='tickets')
+    seat = models.ForeignKey(Seat, on_delete=models.CASCADE, related_name='tickets')
     purchased_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
