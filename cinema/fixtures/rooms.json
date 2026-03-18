@@ -1,0 +1,47 @@
+[
+  {
+    "model": "cinema.room",
+    "pk": 1,
+    "fields": {
+      "name": "Sala 01 - Standard",
+      "rows": 10,
+      "columns": 12
+    }
+  },
+  {
+    "model": "cinema.room",
+    "pk": 2,
+    "fields": {
+      "name": "Sala 02 - IMAX",
+      "rows": 15,
+      "columns": 20
+    }
+  },
+  {
+    "model": "cinema.room",
+    "pk": 3,
+    "fields": {
+      "name": "Sala 03 - VIP",
+      "rows": 6,
+      "columns": 8
+    }
+  },
+  {
+    "model": "cinema.room",
+    "pk": 4,
+    "fields": {
+      "name": "Sala 04 - XD",
+      "rows": 12,
+      "columns": 15
+    }
+  },
+  {
+    "model": "cinema.room",
+    "pk": 5,
+    "fields": {
+      "name": "Sala 05 - Macro XE",
+      "rows": 10,
+      "columns": 14
+    }
+  }
+]
