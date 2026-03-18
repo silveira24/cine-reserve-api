@@ -3,7 +3,7 @@ from django.db import models
 from accounts.models import User
 
 class Movie(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=100)
     description = models.TextField()
     duration_minutes = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
