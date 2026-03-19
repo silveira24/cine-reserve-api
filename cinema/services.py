@@ -8,10 +8,12 @@ class TicketService:
     def lock_seat(session_id, seat_id, user_id, timeout=600):
         redis_conn = get_redis_connection('default')
         lock_key = f"lock:session:{session_id}:seat:{seat_id}"
+        if Ticket.objects.filter(session_id=session_id, seat_id=seat_id).exists():
+            raise ValidationError(f"Seat {seat_id} is already purchased.")
         if redis_conn.set(lock_key, user_id, nx=True, ex=timeout):
             return True
         else:
-            raise ValidationError(f"Seat {seat_id} is already locked by another user.")
+            raise ValidationError(f"Seat {seat_id} is already reserved.")
         
     @staticmethod
     def process_checkout(serializer):
