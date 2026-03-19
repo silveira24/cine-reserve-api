@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from .models import Movie, Room, Seat, Session, Ticket
+from .models import Movie, Seat, Session, Ticket
 from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer, ReservationSerializer, TicketSerializer, TicketListSerializer
 from .services import TicketService
 
