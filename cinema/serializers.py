@@ -85,3 +85,15 @@ class TicketSerializer(serializers.ModelSerializer):
         if Ticket.objects.filter(session=session, seat=seat).exists():
             raise serializers.ValidationError("Seat is already purchased.")
         return data
+    
+class TicketListSerializer(serializers.ModelSerializer):
+    movie = serializers.StringRelatedField(source='session.movie', read_only=True)
+    room = serializers.StringRelatedField(source='session.room', read_only=True)
+
+    seat = serializers.SerializerMethodField(read_only=True)
+
+    def get_seat(self, obj):
+        return f"{obj.seat.row}{obj.seat.column}"
+    class Meta:
+        model = Ticket
+        fields = ['id', 'movie', 'room', 'session', 'seat' ]

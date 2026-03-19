@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 from .models import Movie, Room, Seat, Session, Ticket
-from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer, ReservationSerializer, TicketSerializer
+from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer, ReservationSerializer, TicketSerializer, TicketListSerializer
 from .services import TicketService
 
 from rest_framework.views import APIView
@@ -121,3 +121,17 @@ class CheckoutView(generics.CreateAPIView):
     
     def perform_create(self, serializer):
         return TicketService.process_checkout(serializer)
+    
+class TicketListView(generics.ListAPIView):
+    serializer_class = TicketListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Ticket.objects.filter(user=user).select_related('session', 'seat').order_by('-session__start_time')
+
+        upcoming = self.request.query_params.get('upcoming', False)
+        if upcoming:
+            queryset = queryset.filter(session__start_time__gte=timezone.now())
+
+        return queryset
