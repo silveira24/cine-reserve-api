@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 @extend_schema(auth=[], responses={200: MovieSerializer})
 class MovieList(generics.ListAPIView):
@@ -122,6 +122,7 @@ class CheckoutView(generics.CreateAPIView):
     def perform_create(self, serializer):
         return TicketService.process_checkout(serializer)
     
+@extend_schema(parameters=[OpenApiParameter("upcoming", type=bool, required=False)], responses={200: TicketListSerializer(many=True)})
 class TicketListView(generics.ListAPIView):
     serializer_class = TicketListSerializer
     permission_classes = [permissions.IsAuthenticated]
