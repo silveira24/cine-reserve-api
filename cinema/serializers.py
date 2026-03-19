@@ -64,3 +64,24 @@ class ReservationSerializer(serializers.Serializer):
         if not seat.room == session.room:
             raise serializers.ValidationError("Seat is not in the same room as the session.")
         return data
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = ['id', 'session', 'seat', 'user']
+        validators = []
+
+    def validate(self, data):
+        session = data['session'] 
+        seat = data['seat']
+        if not session:
+            raise serializers.ValidationError("Session does not exist.")
+        if not session.start_time > timezone.now():
+            raise serializers.ValidationError("Session start time has passed.")
+        if not seat:
+            raise serializers.ValidationError("Seat does not exist.")
+        if not seat.room == session.room:
+            raise serializers.ValidationError("Seat is not in the same room as the session.")
+        if Ticket.objects.filter(session=session, seat=seat).exists():
+            raise serializers.ValidationError("Seat is already purchased.")
+        return data

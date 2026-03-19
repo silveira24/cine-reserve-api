@@ -40,5 +40,8 @@ class Ticket(models.Model):
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE, related_name='tickets')
     purchased_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('session', 'seat')
+
     def __str__(self):
         return f"{self.user} - {self.session} - {self.seat}"

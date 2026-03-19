@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from .models import Movie, Room, Seat, Session, Ticket
-from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer, ReservationSerializer
-from .services import ReservationService
+from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer, ReservationSerializer, TicketSerializer
+from .services import TicketService
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -73,8 +73,34 @@ class ReservationSeatView(APIView):
             session_id = serializer.validated_data['session_id']
             seat_id = serializer.validated_data['seat_id']
             user_id = request.user.id
-            sucess = ReservationService.lock_seat(session_id=session_id, seat_id=seat_id, user_id=user_id)
+            sucess = TicketService.lock_seat(session_id=session_id, seat_id=seat_id, user_id=user_id)
 
             return Response({"message": "Seat reserved for 10 minutes successfully."}, status=201)
         
         return Response(serializer.errors, status=400)
+    
+@extend_schema(request=None, responses={201: TicketSerializer})    
+class CheckoutView(generics.CreateAPIView):
+    serializer_class = TicketSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        session_id = kwargs['session_id']
+        seat_id = kwargs['seat_id']
+        user_id = request.user.id
+
+        data = {
+            'session': session_id,
+            'seat': seat_id,
+            'user': user_id
+        }
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
+    
+    def perform_create(self, serializer):
+        return TicketService.process_checkout(serializer)
