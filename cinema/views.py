@@ -50,13 +50,17 @@ class SeatMapView(generics.ListAPIView):
     
 class SeatDetailView(generics.RetrieveAPIView):
     serializer_class = SeatMapSerializer
-    queryset = Seat.objects.all()
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['session_id'] = self.kwargs.get('session_id')
         return context
     
+    def get_queryset(self):
+        session_id = self.kwargs['session_id']
+        session = get_object_or_404(Session, id=session_id)
+        return Seat.objects.filter(room=session.room).order_by('row', 'column')
+
 class ReservationSeatView(APIView):
     def post(self, request, session_id, seat_id):
         data = {
