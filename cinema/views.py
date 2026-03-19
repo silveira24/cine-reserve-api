@@ -1,6 +1,10 @@
 from rest_framework import generics, permissions
 from .models import Movie, Room, Seat, Session, Ticket
-from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer
+from .serializers import MovieSerializer, SessionSerializer, SeatMapSerializer, ReservationSerializer
+from .services import ReservationService
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -52,3 +56,21 @@ class SeatDetailView(generics.RetrieveAPIView):
         context = super().get_serializer_context()
         context['session_id'] = self.kwargs.get('session_id')
         return context
+    
+class ReservationSeatView(APIView):
+    def post(self, request, session_id, seat_id):
+        data = {
+            'session_id': session_id,
+            'seat_id': seat_id
+        }
+        serializer = ReservationSerializer(data=data)
+        
+        if serializer.is_valid():
+            session_id = serializer.validated_data['session_id']
+            seat_id = serializer.validated_data['seat_id']
+            user_id = request.user.id
+            sucess = ReservationService.lock_seat(session_id=session_id, seat_id=seat_id, user_id=user_id)
+
+            return Response({"message": "Seat reserved for 10 minutes successfully."}, status=201)
+        
+        return Response(serializer.errors, status=400)

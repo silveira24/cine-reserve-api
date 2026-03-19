@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Movie, Room, Seat, Session, Ticket
 from django_redis import get_redis_connection
 
+from django.utils import timezone
+
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
@@ -45,3 +47,20 @@ class SeatMapSerializer(serializers.ModelSerializer):
             return 'Reserved'
 
         return 'Available'
+    
+class ReservationSerializer(serializers.Serializer):
+    session_id = serializers.IntegerField()
+    seat_id = serializers.IntegerField()
+
+    def validate(self, data):
+        session = Session.objects.get(id=data['session_id'])
+        seat = Seat.objects.get(id=data['seat_id'])
+        if not session:
+            raise serializers.ValidationError("Session does not exist.")
+        if not session.start_time > timezone.now():
+            raise serializers.ValidationError("Session start time has passed.")
+        if not seat:
+            raise serializers.ValidationError("Seat does not exist.")
+        if not seat.room == session.room:
+            raise serializers.ValidationError("Seat is not in the same room as the session.")
+        return data
