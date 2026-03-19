@@ -16,6 +16,17 @@ class TicketService:
             raise ValidationError(f"Seat {seat_id} is already reserved.")
         
     @staticmethod
+    def unlock_seat(session_id, seat_id, user_id):
+        redis_conn = get_redis_connection('default')
+        lock_key = f"lock:session:{session_id}:seat:{seat_id}"
+        lock_owner = redis_conn.get(lock_key)
+        if not lock_owner:
+            raise ValidationError(f"Seat {seat_id} is not reserved.")
+        if int(lock_owner) != user_id:
+            raise ValidationError(f"Seat {seat_id} is reserved by another user.")
+        redis_conn.delete(lock_key)
+        
+    @staticmethod
     def process_checkout(serializer):
         session = serializer.validated_data['session']
         seat = serializer.validated_data['seat']

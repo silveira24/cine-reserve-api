@@ -79,6 +79,23 @@ class ReservationSeatView(APIView):
         
         return Response(serializer.errors, status=400)
     
+    def delete(self, request, session_id, seat_id):
+        data = {
+            'session_id': session_id,
+            'seat_id': seat_id
+        }
+        serializer = ReservationSerializer(data=data)
+        
+        if serializer.is_valid():
+            session_id = serializer.validated_data['session_id']
+            seat_id = serializer.validated_data['seat_id']
+            user_id = request.user.id
+            sucess = TicketService.unlock_seat(session_id=session_id, seat_id=seat_id, user_id=user_id)
+
+            return Response({"message": "Seat reservation cancelled successfully."}, status=204)
+        
+        return Response(serializer.errors, status=400)
+    
 @extend_schema(request=None, responses={201: TicketSerializer})    
 class CheckoutView(generics.CreateAPIView):
     serializer_class = TicketSerializer
