@@ -24,7 +24,6 @@ class SeatMapSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.session_id = self.context.get('session_id')
-        print(f"Debug: session_id: {self.session_id}")
         self.purchased_ids = set()
         self.locked_ids = set()
 
