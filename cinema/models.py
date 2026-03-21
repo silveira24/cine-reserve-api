@@ -7,6 +7,9 @@ class Movie(models.Model):
     description = models.TextField()
     duration_minutes = models.PositiveIntegerField()
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return self.title
 
