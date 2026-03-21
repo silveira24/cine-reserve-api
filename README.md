@@ -52,4 +52,9 @@ Migrations are applied automatically on startup via the `entrypoint.sh`, but you
 docker compose exec app python manage.py migrate
 ```
 
+### Running Tests
+To run the tests, use the following command:
+```bash
+docker compose exec app python manage.py test
+```
 ---
