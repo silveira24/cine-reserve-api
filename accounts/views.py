@@ -3,7 +3,7 @@ from .serializers import UserSerializer
 from .models import User
 
 from drf_spectacular.utils import extend_schema
-@extend_schema(auth=[], responses={201: UserSerializer})
+@extend_schema(auth=[], responses={201: UserSerializer, 400: UserSerializer}, summary="Register a new user")
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny,)

@@ -151,13 +151,27 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
-SPETACULAR_SETTINGS = {
+SPECTACULAR_SETTINGS = {
     'TITLE': 'Cine Reserve API',
     'DESCRIPTION': 'API for Cine Reserve',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    'COMPONENT_SPLIT_PATH': True,
+    'COMPONENT_SPLIT_PATCH': True,
     'SECURITY': [{'jwt': []}],
+    'CONTACT': {
+        'name': 'Gabriel Silveira',
+        'url': 'https://github.com/silveira24',
+        'email': 'gabrielsilveira@b2bit.company'
+    },
+    'TAGS': [
+        {'name': 'register', 'description': 'register new users'},
+        {'name': 'token', 'description': 'obtain auth token'},
+        {'name': 'movies', 'description': 'list movies and sessions available'},
+        {'name': 'seat-map', 'description': 'get info about seat map of a session'},
+        {'name': 'reservations', 'description': 'reserve or cancel a seat reservation'},
+        {'name': 'checkout', 'description': 'checkout a reservation'},
+        {'name': 'my-tickets', 'description': 'list all tickets of a user'},
+    ]
 }
 
 CACHES = {

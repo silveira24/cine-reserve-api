@@ -9,9 +9,9 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 
-@extend_schema(auth=[], responses={200: MovieSerializer})
+@extend_schema(auth=[], responses={200: MovieSerializer}, summary="List all movies available", tags=["movies"])
 class MovieList(generics.ListAPIView):
     serializer_class = MovieSerializer
     permission_classes=[permissions.AllowAny,]
@@ -22,7 +22,15 @@ class MovieList(generics.ListAPIView):
             sessions__start_time__gte=now
         ).distinct()
     
-@extend_schema(auth=[], responses={200: SessionSerializer})
+@extend_schema(
+    auth=[], 
+    summary="List all future sessions for a movie",
+    responses={
+        200: SessionSerializer, 
+        404: OpenApiResponse(description="Movie not found")
+    },
+    tags=["movies"]
+)
 class MovieSessionList(generics.ListAPIView):
     serializer_class = SessionSerializer
     permission_classes = [permissions.AllowAny,]
@@ -34,7 +42,17 @@ class MovieSessionList(generics.ListAPIView):
             movie=movie,
             start_time__gte=timezone.now()
         ).select_related('room').order_by('start_time')
-    
+
+@extend_schema(
+    summary="Get seat map for a session",
+    responses={
+        200: SeatMapSerializer,
+        400: OpenApiResponse(description="Bad request"),
+        401: OpenApiResponse(description="Unauthorized"),
+        404: OpenApiResponse(description="Session not found")
+    },
+    tags=["seat-map"]
+)    
 class SeatMapView(generics.ListAPIView):
     serializer_class = SeatMapSerializer
 
@@ -48,6 +66,16 @@ class SeatMapView(generics.ListAPIView):
         context['session_id'] = self.kwargs.get('session_id')
         return context
     
+@extend_schema(
+    responses={
+        200: SeatMapSerializer,
+        400: OpenApiResponse(description="Bad request"),
+        401: OpenApiResponse(description="Unauthorized"),
+        404: OpenApiResponse(description="Session not found")
+    },
+    summary="Get a deatailed status of a seat for a session",
+    tags=["seat-map"]
+)
 class SeatDetailView(generics.RetrieveAPIView):
     serializer_class = SeatMapSerializer
 
@@ -61,7 +89,19 @@ class SeatDetailView(generics.RetrieveAPIView):
         session = get_object_or_404(Session, id=session_id)
         return Seat.objects.filter(room=session.room).order_by('row', 'column')
 
+@extend_schema(
+    tags=["reservations"]
+)
 class ReservationSeatView(APIView):
+    @extend_schema(
+        responses={
+            201: OpenApiResponse(description="Seat reserved for 10 minutes successfully"),
+            400: OpenApiResponse(description="Bad request"),
+            401: OpenApiResponse(description="Unauthorized"),
+            404: OpenApiResponse(description="Session or Seat not found")
+        },
+        summary="Reserve a seat for a session",
+    )
     def post(self, request, session_id, seat_id):
         data = {
             'session_id': session_id,
@@ -78,7 +118,16 @@ class ReservationSeatView(APIView):
             return Response({"message": "Seat reserved for 10 minutes successfully."}, status=201)
         
         return Response(serializer.errors, status=400)
-    
+
+    @extend_schema(
+        responses={
+            204: OpenApiResponse(description="Seat reservation cancelled successfully"),
+            400: OpenApiResponse(description="Bad request"),
+            401: OpenApiResponse(description="Unauthorized"),
+            404: OpenApiResponse(description="Session or Seat not found")
+        },
+        summary="Cancel a reserved seat for a session",
+    )    
     def delete(self, request, session_id, seat_id):
         data = {
             'session_id': session_id,
@@ -96,7 +145,17 @@ class ReservationSeatView(APIView):
         
         return Response(serializer.errors, status=400)
     
-@extend_schema(request=None, responses={201: TicketSerializer})    
+@extend_schema(
+    summary="Checkout a reserved seat for a session",
+    request=None, 
+    responses={
+        201: TicketSerializer,
+        400: OpenApiResponse(description="Bad request"),
+        401: OpenApiResponse(description="Unauthorized"),
+        404: OpenApiResponse(description="Session or Seat not found")
+    },
+    tags=["checkout"]
+)    
 class CheckoutView(generics.CreateAPIView):
     serializer_class = TicketSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -122,7 +181,17 @@ class CheckoutView(generics.CreateAPIView):
     def perform_create(self, serializer):
         return TicketService.process_checkout(serializer)
     
-@extend_schema(parameters=[OpenApiParameter("upcoming", type=bool, required=False)], responses={200: TicketListSerializer(many=True)})
+@extend_schema(
+    summary="Get a list of tickets for a user",
+    parameters=[
+        OpenApiParameter("upcoming", type=bool, required=False)],
+    responses={
+        200: TicketListSerializer(many=True),
+        400: OpenApiResponse(description="Bad request"),
+        401: OpenApiResponse(description="Unauthorized")
+    },
+    tags=["my-tickets"]
+)
 class TicketListView(generics.ListAPIView):
     serializer_class = TicketListSerializer
     permission_classes = [permissions.IsAuthenticated]
