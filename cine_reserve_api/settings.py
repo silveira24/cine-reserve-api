@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'aca8ab8c-f9e3-4fa2-9b41-f587b732140b')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cine-reserve-api.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
