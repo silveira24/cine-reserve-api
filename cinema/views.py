@@ -78,6 +78,8 @@ class SeatMapView(generics.ListAPIView):
 )
 class SeatDetailView(generics.RetrieveAPIView):
     serializer_class = SeatMapSerializer
+    lookup_url_kwarg = 'seat_id'
+    lookup_field = 'id'
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
